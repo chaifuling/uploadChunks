@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <input type="file" />
+</body>
+<script src="./uploader.js"></script>
+<script>
+    self.importScripts = (...urls) => {
+        urls.forEach(url => {
+            const script = document.createElement('script');
+            script.src = url;
+            document.head.appendChild(script);
+        });
+    }
+    self.importScripts('./request.js');
+    self.importScripts('./util.js')
+    const input = document.querySelector('input');
+    const MAX_REQUEST_NUM = 10;
+    const MAX_RETRY_NUM = 3;
+    const VERIFY_FILE_API = 'verifyFileAPI';
+    const sliceUploader = new Uploader(UPLOAD_CHUNK_FILE_API, {
+        showProgress: true,
+        enableSlice: true,
+    });
+    input.addEventListener('change', function (e) {
+        const file = e.target.files[0];
+        sliceUploader
+            .upload(file)
+            .onProgress(({ percentage, progressDetail }) => {
+                console.log(percentage, progressDetail);
+            })
+            .onComplete(({ uploadTime, hashTime }) => {
+                console.log(uploadTime, hashTime);
+            });
+    })
+
+
+
+</script>
+
+</html>
